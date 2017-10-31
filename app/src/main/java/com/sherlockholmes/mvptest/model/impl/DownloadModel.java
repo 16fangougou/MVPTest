@@ -1,12 +1,10 @@
 package com.sherlockholmes.mvptest.model.impl;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 
 import com.sherlockholmes.mvptest.model.IDownloadModel;
-import com.sherlockholmes.mvptest.presenter.IDownloadPresenter;
 import com.sherlockholmes.mvptest.presenter.impl.DownloadPresenter;
 import com.sherlockholmes.mvptest.util.HttpUtil;
 
@@ -18,9 +16,9 @@ import com.sherlockholmes.mvptest.util.HttpUtil;
 
 public class DownloadModel implements IDownloadModel {
 
-	private MyHandler handler = new MyHandler();
+	private static MyHandler handler = new MyHandler();
 	private HttpUtil httpUtil;
-	private DownloadPresenter downloadPresenter;
+	private static DownloadPresenter downloadPresenter;
 
 	public DownloadModel(DownloadPresenter downloadPresenter) {
 		this.httpUtil = new HttpUtil();
@@ -32,7 +30,7 @@ public class DownloadModel implements IDownloadModel {
 		httpUtil.downloadImage(url, handler);
 	}
 
-	class MyHandler extends Handler {
+	static class MyHandler extends Handler {
 		/**
 		 * Subclasses must implement this to receive messages.
 		 *
@@ -46,15 +44,9 @@ public class DownloadModel implements IDownloadModel {
 					Bitmap bitmap = (Bitmap) msg.obj;
 					downloadPresenter.downloadSuccess(bitmap);
 					break;
-				case 400:
-					String result400 = (String) msg.obj;
-					downloadPresenter.downloadFail(result400);
-					break;
-				case 500:
-					String result500 = (String) msg.obj;
-					downloadPresenter.downloadFail(result500);
-					break;
 				default:
+					String result = (String) msg.obj;
+					downloadPresenter.downloadFail(result);
 					break;
 			}
 		}

@@ -47,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements IDownloadView {
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		imageView.setImageBitmap(null);
+	}
+
+	@Override
 	public void setProgressProgress(int progress) {
 		progressBar.setProgress(progress);
 	}
