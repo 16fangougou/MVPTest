@@ -30,11 +30,13 @@ public class DownloadPresenter implements IDownloadPresenter {
 
 	@Override
 	public void downloadSuccess(Bitmap result) {
+		iDownloadView.showProgressView(false);
 		iDownloadView.setView(result);
 	}
 
 	@Override
 	public void downloadFail(String result) {
+		iDownloadView.showProgressView(false);
 		iDownloadView.showFailToast(result);
 	}
 

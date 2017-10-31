@@ -1,13 +1,11 @@
 package com.sherlockholmes.mvptest.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -32,28 +30,27 @@ public class HttpUtil {
 				try {
 					URL url = new URL(imageUrl);
 					HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-					httpURLConnection.setDoOutput(false);
-					httpURLConnection.setRequestMethod("GET");
-					httpURLConnection.setConnectTimeout(5000);
-					httpURLConnection.setReadTimeout(10000);
-					httpURLConnection.setUseCaches(true);
+					httpURLConnection.setDoInput(true);
 					httpURLConnection.connect();
 					int code = httpURLConnection.getResponseCode();
 					Log.d(TAG, "run code:" + code);
 
-					inputStream = httpURLConnection.getInputStream();
-					bitmap = BitmapFactory.decodeStream(inputStream);
-					byte[] bytes = getBytesInputStream(inputStream);
-					bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-					if (bitmap != null) {
-						Log.d(TAG, "run: bitmap != null");
+					if (code == HttpURLConnection.HTTP_OK) {
+						// 将得到的数据转化成InputStream
+						inputStream = httpURLConnection.getInputStream();
+						// 将InputStream转换成Bitmap
+						bitmap = BitmapFactory.decodeStream(inputStream);
+						if (bitmap != null) {
+							Log.d(TAG, "run: bitmap != null");
+						}
+						message.what = 200;
+						message.obj = bitmap;
+					} else {
+						message.what = code;
+						message.obj = httpURLConnection.getResponseMessage();
 					}
-					message.what = 200;
-					message.obj = bitmap;
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
-					message.what = 500;
-					message.obj = e.toString();
 				} catch (IOException e) {
 					e.printStackTrace();
 					message.what = 400;
@@ -66,29 +63,9 @@ public class HttpUtil {
 							e.printStackTrace();
 						}
 					}
-					if (null != bitmap) {
-						try {
-							bitmap.recycle();
-							bitmap = null;
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
 				}
 				handler.sendMessage(message);
 			}
 		}).start();
-	}
-
-	private byte[] getBytesInputStream(InputStream is) throws IOException {
-		ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
-		byte[] buff = new byte[512];
-		int len;
-		while ((len = is.read(buff)) != -1) {
-			arrayOutputStream.write(buff, 0, len);
-		}
-		is.close();
-		arrayOutputStream.close();
-		return arrayOutputStream.toByteArray();
 	}
 }

@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements IDownloadView {
 
 	@Override
 	public void showFailToast(String msg) {
-		progressBar.setVisibility(View.GONE);
 		textView.setText(msg);
 	}
 }

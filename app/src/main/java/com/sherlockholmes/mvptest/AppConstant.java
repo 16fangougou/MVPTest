@@ -5,5 +5,5 @@ package com.sherlockholmes.mvptest;
  */
 
 public class AppConstant {
-	public static String IMAGE = "https://timgsa2fd244954a61660019&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F2e2eb9389b504fc209601a49efdde71190ef6dbb.jpg";
+	public static String IMAGE = "http://a.hiphotos.baidu.com/image/pic/item/b999a9014c086e062d68efaf08087bf40bd1cb16.jpg";
 }
