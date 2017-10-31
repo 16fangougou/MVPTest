@@ -10,8 +10,10 @@ import com.sherlockholmes.mvptest.util.HttpUtil;
 
 /**
  * Created by SherlockHolmes on 2017/10/30.
- * <p>
- * ${PACKAGE_NAME}
+ *
+ * 在MVP模式中，Model的工作就是完成具体的业务操作，网络请求，持久化数据增删改查等任务。同时Model中不会包含任何View。
+ *
+ * 这里Model的具体实现很简单，将Http任务的结果返回到Handler当中，而在Handler中的实现又是由Presenter完成。
  */
 
 public class DownloadModel implements IDownloadModel {

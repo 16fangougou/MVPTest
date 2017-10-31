@@ -14,6 +14,9 @@ import com.sherlockholmes.mvptest.R;
 import com.sherlockholmes.mvptest.presenter.impl.DownloadPresenter;
 import com.sherlockholmes.mvptest.view.IDownloadView;
 
+/**
+ * 最后再看一下View接口的具体实现，也就是Activity的实现：
+ */
 public class MainActivity extends AppCompatActivity implements IDownloadView {
 
 	private ProgressBar progressBar;
@@ -31,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements IDownloadView {
 	}
 
 	private void initView() {
+		/**
+		 * 我们在Activity中初始化Presenter中传递的this，也就是当前Activity（View）
+		 */
 		downloadPresenter = new DownloadPresenter(this);
 
 		button = findViewById(R.id.btn_start);
@@ -38,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements IDownloadView {
 		textView = findViewById(R.id.tv_result);
 		imageView = findViewById(R.id.image);
 
+		/**
+		 * 在点下按钮执行开始下载任务的时候，View（Activity）中没有具体的实现，只是调用了Presenter中的download方法，
+		 * 而Presenter中的download又会去调用Model的download方法，
+		 * Model又会在根据具体逻辑（在这里就是Http请求）的状态去调用Presenter中的方法。
+		 */
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -75,4 +86,11 @@ public class MainActivity extends AppCompatActivity implements IDownloadView {
 	public void showFailToast(String msg) {
 		textView.setText(msg);
 	}
+
+	/**
+	 * 至此，我们就通过MVP 的模式实现了我们之前所设想的Activity：
+	 * ①：Button的click方法负责发起下载任务，但又不负责具体实现，而是由Presenter转接给Model去实现
+	 * ②：Activity 什么时候显示ProgressDialog，什么时候显示Toast直接由Presenter告诉他，他只做一个View想做的事情
+	 * ③：Activity里没有任何逻辑处理，所有的逻辑判断都在Model中完成了。
+	 */
 }
